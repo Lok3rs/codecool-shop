@@ -29,5 +29,5 @@ public class CartController extends HttpServlet {
         context.setVariable("cart", cartProducts);
         engine.process("cart/cart.html", context, resp.getWriter());
     }
-    
+
 }
