@@ -23,18 +23,11 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
-
         CartService cartService = new CartService(CartDaoMem.getInstance());
         List<Product> cartProducts = cartService.getProductsInCart();
-
         context.setVariable("service", cartService);
         context.setVariable("cart", cartProducts);
-
         engine.process("cart/cart.html", context, resp.getWriter());
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
+    
 }
