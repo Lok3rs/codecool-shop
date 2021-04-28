@@ -51,14 +51,14 @@
         </thead>
         <tbody>
             <tr th:each="prod, iterstat : ${cart}">
-                <td th:text="${prod.getName()}">Product name</td>
-                <td th:text="${prod.getPrice()}">Product price</td>
-                <td>1</td>
-                <td>
-                    <form action="/remove_from_cart" method="post">
-                        <input type="submit" class="btn btn-sm btn-danger" th:name="${prod.getName()}" name="name" value="X">
-                    </form>
-                </td>
+                    <td th:text="${prod.getName()}">Product name</td>
+                    <td th:text="${cartService.getAllProductsPrice(prod)}">Product price</td>
+                    <td th:text="${cartService.countProduct(prod)}">1</td>
+                    <td>
+                        <form action="/remove_from_cart" method="post">
+                            <input type="submit" class="btn btn-sm btn-danger" th:name="${prod.getName()}" name="name" value="X">
+                        </form>
+                    </td>
             </tr>
         </tbody>
     </table>

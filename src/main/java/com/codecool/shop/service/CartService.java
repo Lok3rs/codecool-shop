@@ -29,4 +29,16 @@ public class CartService {
     public List<Product> getProductsInCart(){
         return cartDao.getProductsInCart();
     }
+
+    public int countProduct(Product countedProduct){
+        int count = 0;
+        for (Product product : getProductsInCart()) {
+            count += product.getName().equals(countedProduct.getName()) ? 1 : 0;
+        }
+        return count;
+    }
+
+    public float getAllProductsPrice(Product product){
+        return countProduct(product) * product.getDefaultPrice();
+    }
 }
