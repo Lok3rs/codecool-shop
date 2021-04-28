@@ -7,6 +7,8 @@
 
     <title>Codecool Shop</title>
 
+
+
     <!-- Bootstrap components -->
     <!-- Latest compiled and minified Jquery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -27,7 +29,12 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- End of Bootstrap components -->
 
+    <!--    Font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css"/>
+
+
 </head>
 
 <body>
@@ -79,9 +86,9 @@
 
 
 
-                    <div class="card-text">
-                        <div class="btn btn-success" id="cart">Add to cart</div>
-                    </div>
+                    <form class="card-text" method="post" action="http://localhost:9999/add_to_cart">
+                        <input class="btn btn-success" type="submit" th:name="${prod.getName()}" name="name" value="Add to cart">
+                    </form>
                 </div>
             </div>
         </div>
