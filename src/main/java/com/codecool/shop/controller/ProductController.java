@@ -21,7 +21,7 @@ import java.util.List;
 
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
-
+    private final int notExistingValue = 0;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,8 +33,8 @@ public class ProductController extends HttpServlet {
         SupplierDaoMem supplierDataStore = SupplierDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
 
-        String categoryValueFromForm = req.getParameter("category-select");
-        String supplierValueFromForm = req.getParameter("supplier-select");
+        int categoryValueFromForm = selectedIdConverter(req.getParameter("category-select"));
+        int supplierValueFromForm = selectedIdConverter(req.getParameter("supplier-select"));
 
         List<Product> products = preparingProductsListToShow(categoryValueFromForm, supplierValueFromForm, productService);
 
@@ -45,7 +45,6 @@ public class ProductController extends HttpServlet {
         context.setVariable("currentSupplier", currentSupplier(supplierValueFromForm, supplierDataStore));
 
         engine.process("product/index.html", context, resp.getWriter());
-
     }
 
     @Override
@@ -54,11 +53,7 @@ public class ProductController extends HttpServlet {
     }
 
 
-    private List<Product> preparingProductsListToShow(String categoryValue, String supplierValue, ProductService productService) {
-        int notExistingValue = 0;
-        int categoryId = selectedIdConverter(categoryValue);
-        int supplierId = selectedIdConverter(supplierValue);
-
+    private List<Product> preparingProductsListToShow(int categoryId, int supplierId, ProductService productService) {
         if (categoryId != notExistingValue && supplierId != notExistingValue) {
             return productService.getProductsForCategoryAndSupplier(categoryId, supplierId);
         } else if (categoryId != notExistingValue && supplierId == notExistingValue) {
@@ -75,31 +70,27 @@ public class ProductController extends HttpServlet {
             if (!valueFromSelect.equals("")) {
                 try {
                     int i = Integer.parseInt(valueFromSelect);
-                    if (i >= 0) {
+                    if (i >= notExistingValue) {
                         return i;
                     }
                 } catch (Exception e) {
-                    new Exception("Selected id does not exists");
+                    throw new RuntimeException("Selected id does not exists");
                 }
             }
         }
-        return 0;
+        return notExistingValue;
     }
 
-    private String currentCategory(String category, ProductCategoryDao productCategoryDataStore) {
-        int categoryId = selectedIdConverter(category);
-
-        if (categoryId != 0) {
+    private String currentCategory(int categoryId, ProductCategoryDao productCategoryDataStore) {
+        if (categoryId != notExistingValue) {
             return productCategoryDataStore.find(categoryId).getName();
         } else {
             return "All";
         }
     }
 
-    private String currentSupplier(String supplier, SupplierDaoMem supplierDataStore){
-        int supplierId = selectedIdConverter(supplier);
-
-        if (supplierId != 0) {
+    private String currentSupplier(int supplierId, SupplierDaoMem supplierDataStore){
+        if (supplierId != notExistingValue) {
             return supplierDataStore.find(supplierId).getName();
         } else {
             return "All";
