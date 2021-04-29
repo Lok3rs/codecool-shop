@@ -37,6 +37,8 @@ public class ProductController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDaoMem supplierDataStore = SupplierDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
+        CartService cartService = new CartService(CartDaoMem.getInstance());
+
 
         int categoryValueFromForm = selectedIdConverter(req.getParameter("category-select"));
         int supplierValueFromForm = selectedIdConverter(req.getParameter("supplier-select"));
@@ -48,13 +50,7 @@ public class ProductController extends HttpServlet {
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("currentCategory", currentCategory(categoryValueFromForm, productCategoryDataStore));
         context.setVariable("currentSupplier", currentSupplier(supplierValueFromForm, supplierDataStore));
-
-        context.setVariable("category", productService.getProductCategory(1));
-        context.setVariable("products", productService.getProductsForCategory(1));
-
-        CartService cartService = new CartService(CartDaoMem.getInstance());
         context.setVariable("cartService", cartService);
-
 
         engine.process("product/index.html", context, resp.getWriter());
     }
@@ -63,7 +59,6 @@ public class ProductController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
-
 
     private List<Product> preparingProductsListToShow(int categoryId, int supplierId, ProductService productService) {
         if (categoryId != notExistingValue && supplierId != notExistingValue) {
