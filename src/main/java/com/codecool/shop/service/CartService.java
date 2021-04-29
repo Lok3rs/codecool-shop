@@ -14,7 +14,6 @@ public class CartService {
     }
 
     public void addToCart(Product product){
-        System.out.println("Added");
         cartDao.addToCart(product);
     }
 

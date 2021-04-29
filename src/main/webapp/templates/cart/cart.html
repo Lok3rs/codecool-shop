@@ -46,6 +46,7 @@
                 <th scope="col">Product Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
+                <th></th>
                 <th scope="col">Remove</th>
             </tr>
         </thead>
@@ -54,6 +55,16 @@
                     <td th:text="${prod.getName()}">Product name</td>
                     <td th:text="${cartService.getAllProductsPrice(prod)}">Product price</td>
                     <td th:text="${cartService.countProduct(prod)}">1</td>
+                    <td>
+                        <form action="/cart" method="post" class="d-inline">
+                            <input type="hidden" name="decrease">
+                            <input type="submit" th:name="${prod.getName()}" name="decrease" value="-" class="btn btn-sm btn-danger">
+                        </form>
+                        <form action="/cart" method="post" class="d-inline">
+                            <input type="hidden" name="increase">
+                            <input type="submit" th:name="${prod.getName()}" name="increase" value="+" class="btn btn-sm btn-success">
+                        </form>
+                    </td>
                     <td>
                         <form action="/remove_from_cart" method="post">
                             <input type="submit" class="btn btn-sm btn-danger" th:name="${prod.getName()}" name="name" value="X">
