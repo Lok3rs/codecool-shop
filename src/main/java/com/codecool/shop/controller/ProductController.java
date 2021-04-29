@@ -27,6 +27,7 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
     private final int notExistingValue = 0;
+    private final String allCategories = "All";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,7 +39,6 @@ public class ProductController extends HttpServlet {
         SupplierDaoMem supplierDataStore = SupplierDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
         CartService cartService = new CartService(CartDaoMem.getInstance());
-
 
         int categoryValueFromForm = selectedIdConverter(req.getParameter("category-select"));
         int supplierValueFromForm = selectedIdConverter(req.getParameter("supplier-select"));
@@ -63,9 +63,9 @@ public class ProductController extends HttpServlet {
     private List<Product> preparingProductsListToShow(int categoryId, int supplierId, ProductService productService) {
         if (categoryId != notExistingValue && supplierId != notExistingValue) {
             return productService.getProductsForCategoryAndSupplier(categoryId, supplierId);
-        } else if (categoryId != notExistingValue && supplierId == notExistingValue) {
+        } else if (categoryId != notExistingValue) {
             return productService.getProductsForCategory(categoryId);
-        } else if (categoryId == notExistingValue && supplierId != notExistingValue) {
+        } else if (supplierId != notExistingValue) {
             return productService.getProductsForSupplier(supplierId);
         } else {
             return productService.getAllProducts();
@@ -84,24 +84,17 @@ public class ProductController extends HttpServlet {
                     throw new RuntimeException("Selected id does not exists");
                 }
             }
-        }
-        return notExistingValue;
+        }return notExistingValue;
     }
 
     private String currentCategory(int categoryId, ProductCategoryDao productCategoryDataStore) {
-        if (categoryId != notExistingValue) {
-            return productCategoryDataStore.find(categoryId).getName();
-        } else {
-            return "All";
-        }
+        if (categoryId != notExistingValue) { return productCategoryDataStore.find(categoryId).getName(); }
+        else { return allCategories; }
     }
 
     private String currentSupplier(int supplierId, SupplierDaoMem supplierDataStore){
-        if (supplierId != notExistingValue) {
-            return supplierDataStore.find(supplierId).getName();
-        } else {
-            return "All";
-        }
+        if (supplierId != notExistingValue) { return supplierDataStore.find(supplierId).getName(); }
+        else { return allCategories; }
     }
 
 }
