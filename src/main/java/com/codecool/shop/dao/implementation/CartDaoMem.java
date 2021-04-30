@@ -5,6 +5,7 @@ import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public class CartDaoMem implements CartDao {
 
@@ -37,7 +38,7 @@ public class CartDaoMem implements CartDao {
     }
 
     @Override
-    public List<Product> getProductsInCart() {
+    public Map<Product, Integer> getProductsInCart() {
         return cart.getProductsInCart();
     }
 }
