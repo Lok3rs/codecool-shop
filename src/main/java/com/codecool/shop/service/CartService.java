@@ -4,6 +4,7 @@ import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.model.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public class CartService {
 
@@ -25,16 +26,15 @@ public class CartService {
         cartDao.clearCart();
     }
 
-    public List<Product> getProductsInCart(){
+    public Map<Product, Integer> getProductsInCart(){
         return cartDao.getProductsInCart();
     }
 
     public int countProduct(Product countedProduct){
-        int count = 0;
-        for (Product product : getProductsInCart()) {
-            count += product.getName().equals(countedProduct.getName()) ? 1 : 0;
+        for (Map.Entry<Product, Integer> productEntry : getProductsInCart().entrySet()) {
+            if (countedProduct.getName().equals(productEntry.getKey().getName())) return productEntry.getValue();
         }
-        return count;
+        return 0;
     }
 
     public float getAllProductsPrice(Product product){

@@ -32,10 +32,10 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        List<Product> uniqueProducts = getUniqueProducts();
+        Map<Product, Integer> productsMap = cartService.getProductsInCart();
 
         context.setVariable("cartService", cartService);
-        context.setVariable("cart", uniqueProducts);
+        context.setVariable("cart", productsMap);
         engine.process("cart/cart.html", context, resp.getWriter());
     }
 
@@ -53,16 +53,4 @@ public class CartController extends HttpServlet {
         resp.sendRedirect("/cart");
     }
 
-    private List<Product> getUniqueProducts(){
-        Map<String, Integer> productsWithQuantity = new HashMap<>();
-        List<Product> uniqueProducts = new LinkedList<>();
-        for (Product product : cartService.getProductsInCart()) {
-            int count = productsWithQuantity.getOrDefault(product.getName(), 0);
-            productsWithQuantity.put(product.getName(), count + 1);
-            if (productsWithQuantity.get(product.getName()) == 1){
-                uniqueProducts.add(product);
-            }
-        }
-        return uniqueProducts;
-    }
 }
