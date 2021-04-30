@@ -2,28 +2,29 @@ package com.codecool.shop.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Cart {
 
-    List<Product> productsInCart;
+    private Order order;
 
     public Cart(){
-        this.productsInCart = new LinkedList<>();
+        this.order = new Order();
     }
 
-    public List<Product> getProductsInCart(){
-        return this.productsInCart;
+    public Map<Product, Integer> getProductsInCart(){
+        return order.getOrderedProducts();
     }
 
     public void addProductToCart(Product product){
-        this.productsInCart.add(product);
+        order.addProduct(product);
     }
 
     public void removeProductFromCart(Product product){
-        this.productsInCart.remove(product);
+        order.removeProduct(product);
     }
 
     public void clearCart(){
-        this.productsInCart.clear();
+        order.clearOrder();
     }
 }
