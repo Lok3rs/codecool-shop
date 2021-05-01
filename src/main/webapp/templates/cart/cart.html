@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <meta name="author" content="Codecool" />
+    <meta name="author" content="Radek % Dawid" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <title>Codecool Shop</title>
@@ -35,7 +35,7 @@
 
 <div class="jumbotron text-center">
     <h1>Codecool Shop</h1>
-    <a href="/cart">Cart: <span th:text="${cartService.getProductsInCart().size()}"></span></a>
+    <a href="/cart">Cart: <span id="count-of-products" th:text="${cartService.getProductsInCart().size()}"></span></a>
 </div>
 
 <div class="container">
@@ -46,7 +46,6 @@
                 <th scope="col">Product Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
-                <th></th>
                 <th scope="col">Remove</th>
             </tr>
         </thead>
@@ -74,9 +73,24 @@
         </tbody>
     </table>
     <form action="/clear_cart" method="post">
-        <input type="submit" class="btn btn-info" value="Clear Cart">
+        <input type="submit" class="btn btn-info" id="clear-cart" value="Clear Cart" disabled>
+    </form>
+    <form action="/checkout-cart" method="get">
+        <input type="submit" class="btn btn-info" id="checkout-btn" value="Checkout Cart" disabled>
+    </form>
+    <form action="/" method="get">
+        <input type="submit" class="btn btn-info" value="Back to main page">
     </form>
 </div>
 <div th:replace="footer.html :: copy"></div>
+
+<script>
+    let countOfProducts = document.getElementById("count-of-products").innerText;
+    if(countOfProducts !== "0") {
+        document.getElementById("clear-cart").disabled = false;
+        document.getElementById("checkout-btn").disabled = false;
+    }
+</script>
+
 </body>
 </html>

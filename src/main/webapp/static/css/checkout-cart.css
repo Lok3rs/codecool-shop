@@ -1,0 +1,13 @@
+h2 {
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+
+form {
+    width: 60%;
+    display: block;
+}
+
+label {
+    width: 100%;
+}
