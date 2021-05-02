@@ -28,8 +28,6 @@ public class Order extends BaseModel {
         this.orderedProducts = new HashMap<>();
     }
 
-
-
     public Map<Product, Integer> getOrderedProducts() {
         return orderedProducts;
     }
@@ -179,49 +177,3 @@ public class Order extends BaseModel {
 
 
 }
-
-
-//    private Map<Product, Integer> orderedProducts;
-//
-//    public Order(){
-//        super("");
-//        this.orderedProducts = new LinkedHashMap<>();
-//    }
-//
-
-//
-//    public void removeProduct(Product product){
-//        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
-//            if (product.getName().equals(productEntry.getKey().getName())){
-//                if (productEntry.getValue() > 1) {
-//                    orderedProducts.put(productEntry.getKey(), productEntry.getValue() - 1);
-//                } else {
-//                    orderedProducts.remove(product);
-//                }
-//            }
-//        }
-//    }
-//
-//    public void clearOrder(){
-//        orderedProducts.clear();
-//    }
-//
-//    public Map<Product, Integer> getOrderedProducts(){
-//        return this.orderedProducts;
-//    }
-
-//    @Override
-//    public String toString() {
-//        return String.format("id: %1$d, " +
-//                        "name: %2$s, " +
-//                        "defaultPrice: %3$f, " +
-//                        "defaultCurrency: %4$s, " +
-//                        "productCategory: %5$s, " +
-//                        "supplier: %6$s",
-//                this.id,
-//                this.name,
-//                this.defaultPrice,
-//                this.defaultCurrency.toString(),
-//                this.productCategory.getName(),
-//                this.supplier.getName());
-//    }

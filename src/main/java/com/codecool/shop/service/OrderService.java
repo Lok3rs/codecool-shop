@@ -4,6 +4,7 @@ import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Product;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public class OrderService {
@@ -41,8 +42,28 @@ public class OrderService {
         return 0;
     }
 
+    public void setUserDetails(HttpServletRequest req){
+        orderDao.setUserDetails(req);
+    }
+
     public float getAllProductsPrice(Product product){
         return countProduct(product) * product.getDefaultPrice();
+    }
+
+    public float getAllOrderPrice(){
+        float price = 0;
+        for (Map.Entry<Product, Integer> productEntry : orderDao.getOrderedProducts().entrySet()) {
+            price += getAllProductsPrice(productEntry.getKey());
+        }
+        return price;
+    }
+
+    public Map<String, String> getBillingDetails(){
+        return orderDao.getBillingDetails();
+    }
+
+    public Map<String, String> getShipmentDetails(){
+        return orderDao.getShipmentDetails();
     }
 }
 
