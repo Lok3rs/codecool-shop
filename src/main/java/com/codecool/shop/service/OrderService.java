@@ -13,21 +13,25 @@ public class OrderService {
         this.orderDao = orderDao;
     }
 
+    public void setOrder(Map<Product, Integer> orderedProducts){
+        orderDao.setOrder(orderedProducts);
+    }
+
 
     public void addToOrder(Product product){
-        cartDao.addToCart(product);
+        orderDao.addProduct(product);
     }
 
     public void removeFromOrder(Product product){
-        cartDao.removeFromCart(product);
+        orderDao.removeProduct(product);
     }
 
     public void clearOrder(){
-        cartDao.clearCart();
+        orderDao.clearOrder();
     }
 
     public Map<Product, Integer> getProductsInCart(){
-        return cartDao.getProductsInCart();
+        return orderDao.getOrderedProducts();
     }
 
     public int countProduct(Product countedProduct){
@@ -42,30 +46,3 @@ public class OrderService {
     }
 }
 
-
-//    public void addToCart(Product product){
-//        cartDao.addToCart(product);
-//    }
-//
-//    public void removeFromCart(Product product){
-//        cartDao.removeFromCart(product);
-//    }
-//
-//    public void clearCart(){
-//        cartDao.clearCart();
-//    }
-//
-//    public Map<Product, Integer> getProductsInCart(){
-//        return cartDao.getProductsInCart();
-//    }
-//
-//    public int countProduct(Product countedProduct){
-//        for (Map.Entry<Product, Integer> productEntry : getProductsInCart().entrySet()) {
-//            if (countedProduct.getName().equals(productEntry.getKey().getName())) return productEntry.getValue();
-//        }
-//        return 0;
-//    }
-//
-//    public float getAllProductsPrice(Product product){
-//        return countProduct(product) * product.getDefaultPrice();
-//    }

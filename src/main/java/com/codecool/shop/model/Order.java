@@ -1,13 +1,10 @@
 package com.codecool.shop.model;
 
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Order extends BaseModel {
 
-    private ArrayList<Product> productsList;
+    private Map<Product, Integer> orderedProducts;
     private String userFirstName;
     private String userLastName;
     private String userMail;
@@ -28,16 +25,45 @@ public class Order extends BaseModel {
 
     public Order() {
         super();
-        this.productsList = new ArrayList<>();
+        this.orderedProducts = new HashMap<>();
     }
 
-    public ArrayList<Product> getProductsList() {
-        return productsList;
+
+
+    public Map<Product, Integer> getOrderedProducts() {
+        return orderedProducts;
     }
 
-    public void setProductsList(ArrayList<Product> productsList) {
-        this.productsList = productsList;
+    public void setOrderedProducts(Map<Product, Integer> orderedProducts){
+        this.orderedProducts = orderedProducts;
     }
+
+    public void addProduct(Product product) {
+        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
+            if (product.getName().equals(productEntry.getKey().getName())) {
+                orderedProducts.put(productEntry.getKey(), productEntry.getValue() + 1);
+                return;
+            }
+        }
+        orderedProducts.put(product, 1);
+    }
+
+    public void removeProduct(Product product) {
+        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
+            if (product.getName().equals(productEntry.getKey().getName())) {
+                if (productEntry.getValue() > 1) {
+                    orderedProducts.put(productEntry.getKey(), productEntry.getValue() - 1);
+                } else {
+                    orderedProducts.remove(product);
+                }
+            }
+        }
+    }
+
+    public void clearOrder() {
+        orderedProducts.clear();
+    }
+
 
     public String getUserFirstName() {
         return userFirstName;
@@ -162,15 +188,7 @@ public class Order extends BaseModel {
 //        this.orderedProducts = new LinkedHashMap<>();
 //    }
 //
-//    public void addProduct(Product product){
-//        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
-//            if (product.getName().equals(productEntry.getKey().getName())){
-//                orderedProducts.put(productEntry.getKey(), productEntry.getValue() + 1);
-//                return;
-//            }
-//        }
-//        orderedProducts.put(product, 1);
-//    }
+
 //
 //    public void removeProduct(Product product){
 //        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
