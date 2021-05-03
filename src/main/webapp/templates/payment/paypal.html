@@ -40,8 +40,11 @@
 </div>
 
 <div class="container">
+    <h2>Paypal</h2>
 
     <h3>Total price: <span th:text="${totalPrice}">total price value</span></h3>
+
+    <h4>Fill that form using correct data to finish payment</h4>
 
     <form action="/order-summary" method="post">
         <label for="username">Username</label>
@@ -54,5 +57,6 @@
 
     <a href="/order" class="btn btn-warning">Go back</a>
 </div>
+<div th:replace="footer.html :: copy"></div>
 </body>
 </html>

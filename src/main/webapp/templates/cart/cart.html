@@ -82,7 +82,7 @@
         <input type="submit" class="btn btn-info" value="Back to main page">
     </form>
 </div>
-<div th:replace="footer.html :: copy"></div>
+
 
 <script>
     let countOfProducts = document.getElementById("count-of-products").innerText;
@@ -91,6 +91,6 @@
         document.getElementById("checkout-btn").disabled = false;
     }
 </script>
-
+<div th:replace="footer.html :: copy"></div>
 </body>
 </html>

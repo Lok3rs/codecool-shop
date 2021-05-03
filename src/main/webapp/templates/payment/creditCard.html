@@ -40,8 +40,11 @@
 </div>
 
 <div class="container">
+    <h2>Credit Card</h2>
 
     <h3>Total price: <span th:text="${totalPrice}">total price value</span></h3>
+
+    <h4>Fill that form using correct data to finish payment</h4>
 
     <form action="/order-summary" method="post">
         <label for="card-number">Card number</label>
@@ -54,10 +57,10 @@
         <input type="text" name="code" id="code" size="4" pattern="^[a-zA-Z0-9]+$" required>
 
         <input type="submit" id="pay-btn" value="Pay">
-
     </form>
 
     <a href="/order" class="btn btn-warning">Go back</a>
 </div>
+<div th:replace="footer.html :: copy"></div>
 </body>
 </html>

@@ -11,6 +11,7 @@ public class SerializationMenager {
     private Gson gson;
 
     public SerializationMenager() {
+
         this.gson = new Gson();
     }
 
@@ -20,7 +21,7 @@ public class SerializationMenager {
         try(PrintWriter out = new PrintWriter(file.getAbsolutePath())){
             out.println(gson.toJson(order));
         }catch (Exception e){
-            System.out.println("It is imposible to save log file of order: " + order.getId());
+            System.out.println("It is impossible to save log file of order: " + order.getId());
         }
     }
 
