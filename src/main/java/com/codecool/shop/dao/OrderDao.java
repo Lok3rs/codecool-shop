@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderDao {
+    Order getOrder();
+    boolean getorderPaidStatus();
+    void orderPaidStatus(boolean status);
     void setOrder(Map<Product, Integer> order);
     void addProduct(Product product);
     void removeProduct(Product product);

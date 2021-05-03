@@ -22,6 +22,8 @@ public class Order extends BaseModel {
     private String streetShip;
     private int houseNumberShip;
 
+    private boolean donePayment;
+
 
     public Order() {
         super();
@@ -176,4 +178,9 @@ public class Order extends BaseModel {
     }
 
 
+    public boolean isDonePayment() { return donePayment; }
+
+    public void setDonePayment(boolean donePayment) {
+        this.donePayment = donePayment;
+    }
 }

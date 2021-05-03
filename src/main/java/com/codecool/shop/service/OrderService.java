@@ -2,6 +2,7 @@ package com.codecool.shop.service;
 
 import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 public class OrderService {
     private final OrderDao orderDao;
+
+    public Order getOrder(){ return orderDao.getOrder(); }
 
     public OrderService(OrderDao orderDao){
         this.orderDao = orderDao;
@@ -65,5 +68,9 @@ public class OrderService {
     public Map<String, String> getShipmentDetails(){
         return orderDao.getShipmentDetails();
     }
+
+    public void setPaidOrderStatus(boolean status){ orderDao.orderPaidStatus(status); }
+
+    public boolean getPaidOrderStatus(){ return orderDao.getorderPaidStatus(); }
 }
 

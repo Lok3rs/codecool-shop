@@ -23,6 +23,15 @@ public class OrderDaoMem implements OrderDao {
     }
 
     @Override
+    public Order getOrder(){ return order; }
+
+    @Override
+    public boolean getorderPaidStatus(){ return order.isDonePayment(); }
+
+    @Override
+    public void orderPaidStatus(boolean status){ order.setDonePayment(status); }
+
+    @Override
     public void setOrder(Map<Product, Integer> orderedProducts) {
         order.setOrderedProducts(orderedProducts);
     }
