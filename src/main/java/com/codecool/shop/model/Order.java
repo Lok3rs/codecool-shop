@@ -55,6 +55,7 @@ public class Order extends BaseModel {
                     orderedProducts.put(productEntry.getKey(), productEntry.getValue() - 1);
                 } else {
                     orderedProducts.remove(product);
+                    return;
                 }
             }
         }
@@ -64,6 +65,7 @@ public class Order extends BaseModel {
         for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
             if (product.getName().equals(productEntry.getKey().getName())) {
                 orderedProducts.remove(product);
+                return;
             }
         }
     }
