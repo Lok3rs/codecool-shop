@@ -2,18 +2,18 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.model.Cart;
-import com.codecool.shop.model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CartDaoMem implements CartDao {
 
-    private static CartDaoMem instance = null;
-    private static Cart cart = new Cart();
+    private static CartDaoMem instance;
+    private List<Cart> data;
 
-    // Private Constructor prevents any other class from instantiating
-    private CartDaoMem(){}
+    private CartDaoMem(){
+        this.data = new ArrayList<>();
+    }
 
     public static CartDaoMem getInstance(){
         if (instance == null){
@@ -22,23 +22,24 @@ public class CartDaoMem implements CartDao {
         return instance;
     }
 
-    @Override
-    public void addToCart(Product product) {
-        cart.addProductToCart(product);
+
+    public void add(Cart cart) {
+        cart.setId(data.size() + 1);
+        data.add(cart);
     }
 
-    @Override
-    public void removeFromCart(Product product) {
-        cart.removeProductFromCart(product);
+
+    public Cart find(int id) {
+        return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
     }
 
-    @Override
-    public void clearCart() {
-        cart.clearCart();
+
+    public void remove(int id) {
+        data.remove(find(id));
     }
 
-    @Override
-    public Map<Product, Integer> getProductsInCart() {
-        return cart.getProductsInCart();
+
+    public List<Cart> getAll() {
+        return data;
     }
 }

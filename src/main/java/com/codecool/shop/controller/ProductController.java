@@ -6,12 +6,10 @@ import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
-
-import com.codecool.shop.service.CartService;
-
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
-
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -28,6 +26,8 @@ import java.util.List;
 public class ProductController extends HttpServlet {
     private final int notExistingValue = 0;
     private final String allCategories = "All";
+    private Cart cart;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,12 +40,18 @@ public class ProductController extends HttpServlet {
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
         CartService cartService = new CartService(CartDaoMem.getInstance());
 
+        if(req.getSession().getAttribute("cart-id") == null) {
+            this.cart = cartService.createCart();
+        }
+
+
         int categoryValueFromForm = selectedIdConverter(req.getParameter("category-select"));
         int supplierValueFromForm = selectedIdConverter(req.getParameter("supplier-select"));
 
         List<Product> products = preparingProductsListToShow(categoryValueFromForm, supplierValueFromForm, productService);
 
         context.setVariable("products", products);
+        context.setVariable("cart", cart);
         context.setVariable("productsCategory", productCategoryDataStore.getAll());
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("currentCategory", currentCategory(categoryValueFromForm, productCategoryDataStore));

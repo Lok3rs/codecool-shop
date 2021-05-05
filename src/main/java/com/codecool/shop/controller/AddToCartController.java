@@ -12,9 +12,7 @@ import com.codecool.shop.service.ProductService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,11 +24,16 @@ public class AddToCartController extends HttpServlet {
         ProductService productService = new ProductService(ProductDaoMem.getInstance(), ProductCategoryDaoMem.getInstance(), SupplierDaoMem.getInstance());
         CartService cartService = new CartService(CartDaoMem.getInstance());
         List<Product> products = productService.getAllProducts();
+
+        int cartId = Integer.parseInt(req.getParameter("cart-id"));
+
         for (Product product : products) {
             if(req.getParameter(product.getName()) != null){
-                cartService.addToCart(product);
+                cartService.addToCart(product, cartId);
             }
         }
+
+        req.getSession().setAttribute("cart-id", "" + cartId);
         resp.sendRedirect("/cart");
     }
 }

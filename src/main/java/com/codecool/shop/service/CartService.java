@@ -1,43 +1,53 @@
 package com.codecool.shop.service;
 
 import com.codecool.shop.dao.CartDao;
+import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 
-import java.util.List;
 import java.util.Map;
 
 public class CartService {
 
     private CartDao cartDao;
 
-    public CartService(CartDao cartDao){
+    public CartService(CartDao cartDao) {
         this.cartDao = cartDao;
     }
 
-    public void addToCart(Product product){
-        cartDao.addToCart(product);
+    public Cart getCart(int id){
+        return cartDao.find(id);
     }
 
-    public void removeFromCart(Product product){
-        cartDao.removeFromCart(product);
+    public Cart createCart(){
+        Cart cart = new Cart();
+        cartDao.add(cart);
+        return cart;
     }
 
-    public void clearCart(){
-        cartDao.clearCart();
+    public void addToCart(Product product, int id) {
+        getCart(id).addProductToCart(product);
     }
 
-    public Map<Product, Integer> getProductsInCart(){
-        return cartDao.getProductsInCart();
+    public void removeFromCart(Product product, int id) {
+        getCart(id).removeProductFromCart(product);
     }
 
-    public int countProduct(Product countedProduct){
-        for (Map.Entry<Product, Integer> productEntry : getProductsInCart().entrySet()) {
+    public void clearCart(int id) {
+        getCart(id).clearCart();
+    }
+
+    public Map<Product, Integer> getProductsInCart(int id) {
+        return getCart(id).getProductsInCart();
+    }
+
+    public int countProduct(Product countedProduct, int id) {
+        for (Map.Entry<Product, Integer> productEntry : getProductsInCart(id).entrySet()) {
             if (countedProduct.getName().equals(productEntry.getKey().getName())) return productEntry.getValue();
         }
         return 0;
     }
 
-    public float getAllProductsPrice(Product product){
-        return countProduct(product) * product.getDefaultPrice();
+    public float getAllProductsPrice(Product product, int id) {
+        return countProduct(product, id) * product.getDefaultPrice();
     }
 }

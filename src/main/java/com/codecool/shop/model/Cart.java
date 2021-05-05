@@ -1,10 +1,8 @@
 package com.codecool.shop.model;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-public class Cart {
+public class Cart extends BaseModel{
 
     private Order order;
 

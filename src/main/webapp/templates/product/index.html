@@ -41,7 +41,7 @@
 
 <div class="jumbotron text-center">
     <h1>Codecool Shop</h1>
-    <a href="/cart">Cart: <span th:text="${cartService.getProductsInCart().size()}"></span></a>
+<!--    <a href="/cart">Cart: <span th:text="${cartService.getProductsInCart(cart.getId()).size()}"></span></a>-->
 </div>
 
 <div class="container">
@@ -84,9 +84,10 @@
                     <div class="card-text">
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
-
+<!--to nie jest pewne TODO drugi sposób pewniejszy-->
                     <form class="card-text" method="post" action="/add_to_cart">
-                        <input class="btn btn-success" type="submit" th:name="${prod.getName()}" name="name" value="Add to cart">
+                        <input type="text" name="cart-id" id="cart-id" th:value="${cart.getId()}" hidden>
+                        <input class="btn btn-success" type="submit" th:field="${cart.getId()}" th:name="${prod.getName()}" name="name" value="Add to cart">
                     </form>
                 </div>
             </div>
