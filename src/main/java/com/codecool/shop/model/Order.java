@@ -60,10 +60,17 @@ public class Order extends BaseModel {
         }
     }
 
+    public void removeAllTheSameProducts(Product product){
+        for (Map.Entry<Product, Integer> productEntry : orderedProducts.entrySet()) {
+            if (product.getName().equals(productEntry.getKey().getName())) {
+                orderedProducts.remove(product);
+            }
+        }
+    }
+
     public void clearOrder() {
         orderedProducts.clear();
     }
-
 
     public String getUserFirstName() {
         return userFirstName;

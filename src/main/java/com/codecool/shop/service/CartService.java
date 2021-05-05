@@ -32,6 +32,10 @@ public class CartService {
         getCart(id).removeProductFromCart(product);
     }
 
+    public void removeAllTheSameProducts(Product product, int id){
+        getCart(id).removeAllTheSameProducts(product);
+    }
+
     public void clearCart(int id) {
         getCart(id).clearCart();
     }

@@ -36,7 +36,7 @@
 
 <div class="jumbotron text-center">
     <h1>Codecool Shop</h1>
-    <a href="/cart">Cart: <span id="count-of-products" th:text="${cartService.getProductsInCart().size()}"></span></a>
+    <a href="/cart">Cart: <span id="count-of-products" th:text="${cartService.getProductsInCart(cartId).size()}"></span></a>
 </div>
 
 <div class="container">
@@ -52,7 +52,7 @@
         <tbody>
         <tr th:each="prod : ${cart}">
             <td th:text="${prod.getKey().getName()}">Product name</td>
-            <td th:text="${cartService.getAllProductsPrice(prod.getKey())}">Product price</td>
+            <td th:text="${cartService.getAllProductsPrice(prod.getKey(),cartId)}">Product price</td>
             <td th:text="${prod.getValue()}">1</td>
         </tr>
         </tbody>

@@ -44,7 +44,6 @@ public class ProductController extends HttpServlet {
             this.cart = cartService.createCart();
         }
 
-
         int categoryValueFromForm = selectedIdConverter(req.getParameter("category-select"));
         int supplierValueFromForm = selectedIdConverter(req.getParameter("supplier-select"));
 

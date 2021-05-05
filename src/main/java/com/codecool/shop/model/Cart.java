@@ -22,6 +22,11 @@ public class Cart extends BaseModel{
         order.removeProduct(product);
     }
 
+    public void removeAllTheSameProducts(Product product){
+        order.removeAllTheSameProducts(product);
+    }
+
+
     public void clearCart(){
         order.clearOrder();
     }

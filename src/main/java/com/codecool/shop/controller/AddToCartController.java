@@ -25,15 +25,15 @@ public class AddToCartController extends HttpServlet {
         CartService cartService = new CartService(CartDaoMem.getInstance());
         List<Product> products = productService.getAllProducts();
 
-        int cartId = Integer.parseInt(req.getParameter("cart-id"));
+        String cartId = req.getParameter("cart-id");
 
         for (Product product : products) {
             if(req.getParameter(product.getName()) != null){
-                cartService.addToCart(product, cartId);
+                cartService.addToCart(product, Integer.parseInt(cartId));
             }
         }
 
-        req.getSession().setAttribute("cart-id", "" + cartId);
+        req.getSession().setAttribute("cart-id", cartId);
         resp.sendRedirect("/cart");
     }
 }
