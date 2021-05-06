@@ -1,6 +1,7 @@
 package com.codecool.shop.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Order extends BaseModel {
 
@@ -192,4 +193,5 @@ public class Order extends BaseModel {
     public void setDonePayment(boolean donePayment) {
         this.donePayment = donePayment;
     }
+
 }

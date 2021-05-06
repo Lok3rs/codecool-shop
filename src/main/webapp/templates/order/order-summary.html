@@ -53,12 +53,12 @@
         <tr th:each="prod : ${orderedProducts}">
             <td th:text="${prod.getKey().getName()}">Product name</td>
             <td th:text="${prod.getValue()}">Product quantity</td>
-            <td th:text="${orderService.getAllProductsPrice(prod.getKey())}">Price</td>
+            <td th:text="${cartService.getAllProductsPrice(prod.getKey(),cartId)}">Price</td>
         </tr>
         <tr>
             <td></td>
             <td>Total price</td>
-            <td th:text="${orderService.getAllOrderPrice()}" id="total-price">Sum of all products</td>
+            <td th:text="${cartService.getAllOrderPrice(cartId)}" id="total-price">Sum of all products</td>
         </tr>
         </tbody>
     </table>
@@ -66,7 +66,7 @@
     <h1>Billing details</h1>
     <table>
         <tbody>
-        <tr th:each="detail : ${orderService.getBillingDetails().entrySet()}">
+        <tr th:each="detail : ${cartService.getBillingDetails(cartId).entrySet()}">
             <td th:text="${detail.getKey()}"></td>
             <td th:text="${detail.getValue()}"></td>
         </tr>
@@ -76,7 +76,7 @@
     <h1>Shipment details</h1>
     <table>
         <tbody>
-        <tr th:each="detail : ${orderService.getShipmentDetails().entrySet()}">
+        <tr th:each="detail : ${cartService.getShipmentDetails(cartId).entrySet()}">
             <td th:text="${detail.getKey()}"></td>
             <td th:text="${detail.getValue()}"></td>
         </tr>

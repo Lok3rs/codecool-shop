@@ -16,6 +16,9 @@ public class OrderService {
         this.orderDao = orderDao;
     }
 
+    public void addToOrderDaoMem(Order order){
+        orderDao.add(order);
+    }
 
     public Order getOrder(int id) {
         return orderDao.find(id);

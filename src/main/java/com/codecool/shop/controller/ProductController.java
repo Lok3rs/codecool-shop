@@ -40,6 +40,8 @@ public class ProductController extends HttpServlet {
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
         CartService cartService = new CartService(CartDaoMem.getInstance());
 
+//        TODO popracować nad sposobem dodania koszyka
+        System.out.println(req.getSession().getAttribute("cart-id"));
         if(req.getSession().getAttribute("cart-id") == null) {
             this.cart = cartService.createCart();
         }

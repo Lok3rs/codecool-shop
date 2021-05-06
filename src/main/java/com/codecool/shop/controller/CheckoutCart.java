@@ -3,6 +3,7 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
@@ -42,8 +43,10 @@ public class CheckoutCart extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        orderService.setOrder(cartService.getProductsInCart(cartId), cartId);
-        orderService.setUserDetails(req, cartId);
+        Order orderFromCart = cartService.getOrderFromCart(cartId);
+        orderFromCart.setOrderedProducts(cartService.getProductsInCart(cartId));
+        cartService.setUserDetails(req, cartId);
+
         resp.sendRedirect("/order");
     }
 }
