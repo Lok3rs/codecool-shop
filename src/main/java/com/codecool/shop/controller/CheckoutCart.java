@@ -1,10 +1,13 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.implementation.AdminLogDaoMem;
 import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
+import com.codecool.shop.model.Action;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
+import com.codecool.shop.service.AdminLogService;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import org.thymeleaf.TemplateEngine;
@@ -24,6 +27,7 @@ public class CheckoutCart extends HttpServlet {
 
     private final CartService cartService =  new CartService(CartDaoMem.getInstance());
     private final OrderService orderService = new OrderService(OrderDaoMem.getInstance());
+    private final AdminLogService adminLogService = new AdminLogService(AdminLogDaoMem.getInstance());
     private int cartId;
 
     @Override
@@ -46,6 +50,8 @@ public class CheckoutCart extends HttpServlet {
         Order orderFromCart = cartService.getOrderFromCart(cartId);
         orderFromCart.setOrderedProducts(cartService.getProductsInCart(cartId));
         cartService.setUserDetails(req, cartId);
+
+        adminLogService.addLog(Action.ORDER_FORM.getAction());
 
         resp.sendRedirect("/order");
     }

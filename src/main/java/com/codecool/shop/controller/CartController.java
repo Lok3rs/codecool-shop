@@ -39,7 +39,6 @@ public class CartController extends HttpServlet {
             this.cartId = Integer.parseInt((String) req.getSession().getAttribute("cart-id"));
         }
 
-
         Map<Product, Integer> productsMap = cartService.getProductsInCart(cartId);
 
         context.setVariable("cartService", cartService);

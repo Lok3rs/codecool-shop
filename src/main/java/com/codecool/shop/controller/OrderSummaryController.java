@@ -1,12 +1,15 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.implementation.AdminLogDaoMem;
 import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.dao.json.SerializationMenager;
 import com.codecool.shop.mail.SendMail;
+import com.codecool.shop.model.Action;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
+import com.codecool.shop.service.AdminLogService;
 import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.OrderService;
 import org.thymeleaf.TemplateEngine;
@@ -27,6 +30,7 @@ public class OrderSummaryController extends HttpServlet {
     private final OrderService orderService = new OrderService(OrderDaoMem.getInstance());
     private final SerializationMenager serialization = new SerializationMenager();
     private final CartService cartService = new CartService(CartDaoMem.getInstance());
+    private final AdminLogService adminLogService = new AdminLogService(AdminLogDaoMem.getInstance());
     private int cartId;
 
 
@@ -39,10 +43,12 @@ public class OrderSummaryController extends HttpServlet {
         Order currentOrder = cartService.getOrderFromCart(cartId);
         Map<Product, Integer> orderedProducts = currentOrder.getOrderedProducts();
         orderService.addToOrderDaoMem(currentOrder);
+        adminLogService.addLog(Action.ORDER_SUMMARY.getAction());
 
         orderService.setPaidOrderStatus(true, currentOrder.getId());
         summaryMail(currentOrder);
         serialization.saveLog(currentOrder);
+        adminLogService.saveLogs(currentOrder.getId());
 
         context.setVariable("cartId", cartId);
         context.setVariable("paymentStatus", orderService.getPaidOrderStatus(currentOrder.getId()));
@@ -55,6 +61,7 @@ public class OrderSummaryController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        adminLogService.addLog(Action.CORRECT_PAYMENT.getAction());
         doGet(req, resp);
     }
 
