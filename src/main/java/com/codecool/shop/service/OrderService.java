@@ -1,7 +1,6 @@
 package com.codecool.shop.service;
 
-import com.codecool.shop.dao.CartDao;
-import com.codecool.shop.model.Cart;
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 
@@ -9,46 +8,40 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CartService {
+public class OrderService {
+    private final OrderDao orderDao;
 
-    private CartDao cartDao;
 
-    public CartService(CartDao cartDao) {
-        this.cartDao = cartDao;
+    public OrderService(OrderDao orderDao) {
+        this.orderDao = orderDao;
     }
 
-    public Cart getCart(int id){
-        return cartDao.find(id);
+    public void addToOrderDaoMem(Order order){
+        orderDao.add(order);
     }
 
-    public Cart createCart(){
-        Cart cart = new Cart();
-//        cartDao.add(cart);
-        return cart;
+    public Order getOrder(int id) {
+        return orderDao.find(id);
     }
 
-    public Order getOrderFromCart(int id){
-        return getCart(id).getOrder();
+    public void setOrder(Map<Product, Integer> orderedProducts, int id) {
+        getOrder(id).setOrderedProducts(orderedProducts);
     }
 
-    public void addToCart(Product product, int id) {
-        getCart(id).addProductToCart(product);
+    public void addToOrder(Product product, int id) {
+        getOrder(id).addProduct(product);
     }
 
-    public void removeFromCart(Product product, int id) {
-        getCart(id).removeProductFromCart(product);
+    public void removeFromOrder(Product product, int id) {
+        getOrder(id).removeProduct(product);
     }
 
-    public void removeAllTheSameProducts(Product product, int id){
-        getCart(id).removeAllTheSameProducts(product);
-    }
-
-    public void clearCart(int id) {
-        getCart(id).clearCart();
+    public void clearOrder(int id) {
+        getOrder(id).clearOrder();
     }
 
     public Map<Product, Integer> getProductsInCart(int id) {
-        return getCart(id).getProductsInCart();
+        return getOrder(id).getOrderedProducts();
     }
 
     public int countProduct(Product countedProduct, int id) {
@@ -56,38 +49,11 @@ public class CartService {
             if (countedProduct.getName().equals(productEntry.getKey().getName())) return productEntry.getValue();
         }
         return 0;
-    }
 
-    public float getAllProductsPrice(Product product, int id) {
-        return countProduct(product, id) * product.getDefaultPrice();
-    }
-
-
-    public float getAllOrderPrice(int id) {
-        float price = 0;
-        for (Map.Entry<Product, Integer> productEntry : getOrderFromCart(id).getOrderedProducts().entrySet()) {
-            price += getAllProductsPrice(productEntry.getKey(), id);
-        }
-        return price;
-    }
-
-    public Map<String, String> getBillingDetails(int id) {
-        Order order  = getOrderFromCart(id);
-        Map<String, String> billingDetails = new LinkedHashMap<>();
-        billingDetails.put("First name", order.getUserFirstName());
-        billingDetails.put("Last name", order.getUserLastName());
-        billingDetails.put("Email", order.getUserMail());
-        billingDetails.put("Phone", String.valueOf(order.getUserPhone()));
-        billingDetails.put("Country", order.getCountryBilling());
-        billingDetails.put("City", order.getCityBilling());
-        billingDetails.put("Zip", order.getZipBilling());
-        billingDetails.put("Street", order.getStreetBilling());
-        billingDetails.put("House number", String.valueOf(order.getHouseNumberBilling()));
-        return billingDetails;
     }
 
     public void setUserDetails(HttpServletRequest req, int id) {
-        Order order  = getOrderFromCart(id);
+        Order order  = getOrder(id);
         order.setUserFirstName(req.getParameter("first-name"));
         order.setUserLastName(req.getParameter("last-name"));
         order.setUserMail(req.getParameter("email"));
@@ -106,8 +72,35 @@ public class CartService {
 
     }
 
+    public float getAllProductsPrice(Product product, int id) {
+        return countProduct(product, id) * product.getDefaultPrice();
+    }
+
+    public float getAllOrderPrice(int id) {
+        float price = 0;
+        for (Map.Entry<Product, Integer> productEntry : getOrder(id).getOrderedProducts().entrySet()) {
+            price += getAllProductsPrice(productEntry.getKey(), id);
+        }
+        return price;
+    }
+
+    public Map<String, String> getBillingDetails(int id) {
+        Order order  = getOrder(id);
+        Map<String, String> billingDetails = new LinkedHashMap<>();
+        billingDetails.put("First name", order.getUserFirstName());
+        billingDetails.put("Last name", order.getUserLastName());
+        billingDetails.put("Email", order.getUserMail());
+        billingDetails.put("Phone", String.valueOf(order.getUserPhone()));
+        billingDetails.put("Country", order.getCountryBilling());
+        billingDetails.put("City", order.getCityBilling());
+        billingDetails.put("Zip", order.getZipBilling());
+        billingDetails.put("Street", order.getStreetBilling());
+        billingDetails.put("House number", String.valueOf(order.getHouseNumberBilling()));
+        return billingDetails;
+    }
+
     public Map<String, String> getShipmentDetails(int id) {
-        Order order = getOrderFromCart(id);
+        Order order = getOrder(id);
 
         Map<String, String> shipmentDetails = new LinkedHashMap<>();
         shipmentDetails.put("Country", order.getCountryShip());
@@ -117,4 +110,13 @@ public class CartService {
         shipmentDetails.put("House number", String.valueOf(order.getHouseNumberShip()));
         return shipmentDetails;
     }
+
+    public void setPaidOrderStatus(boolean status, int id) {
+        getOrder(id).setDonePayment(status);
+    }
+
+    public boolean getPaidOrderStatus(int id) {
+        return getOrder(id).isDonePayment();
+    }
 }
+

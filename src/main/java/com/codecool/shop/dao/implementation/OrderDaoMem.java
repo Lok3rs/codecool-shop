@@ -1,18 +1,19 @@
 package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.OrderDao;
-import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Order;
-import com.codecool.shop.model.Product;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDaoMem implements OrderDao {
 
-    private static OrderDaoMem instance = null;
-    private static Order order = new Order();
+    private static OrderDaoMem instance;
+    private final List<Order> data;
 
-    private OrderDaoMem(){}
+    private OrderDaoMem(){
+        this.data = new ArrayList<>();
+    }
 
     public static OrderDaoMem getInstance(){
         if (instance == null){
@@ -23,22 +24,27 @@ public class OrderDaoMem implements OrderDao {
 
 
     @Override
-    public void addProduct(Product product) {
-        order.addProduct(product);
+    public void add(Order order) {
+        order.setId(data.size() + 1);
+        data.add(order);
     }
 
-    @Override
-    public void removeProduct(Product product) {
-        order.removeProduct(product);
-    }
 
     @Override
-    public void clearOrder() {
-        order.clearOrder();
+    public Order find(int id) {
+        return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
     }
 
+
     @Override
-    public Map<Product, Integer> getOrderedProducts() {
-        return order.getOrderedProducts();
+    public void remove(int id) {
+        data.remove(find(id));
     }
+
+
+    @Override
+    public List<Order> getAll() {
+        return data;
+    }
+
 }

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="Radek % Dawid"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>Codecool Shop</title>
+
+    <!-- Bootstrap components -->
+    <!-- Latest compiled and minified Jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!--Latest compiled and minified Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- End of Bootstrap components -->
+
+    <!--    Font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css"/>
+</head>
+
+<body>
+
+<div class="jumbotron text-center">
+    <h1>Codecool Shop</h1>
+</div>
+
+<div class="container">
+    <h1>Order Summary</h1>
+    <table class="table table-stripped">
+        <thead>
+        <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prod : ${orderedProducts}">
+            <td th:text="${prod.getKey().getName()}">Product name</td>
+            <td th:text="${prod.getValue()}">Product quantity</td>
+            <td th:text="${cartService.getAllProductsPrice(prod.getKey(),cartId)}">Price</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Total price</td>
+            <td th:text="${cartService.getAllOrderPrice(cartId)}" id="total-price">Sum of all products</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>Billing details</h1>
+    <table>
+        <tbody>
+        <tr th:each="detail : ${cartService.getBillingDetails(cartId).entrySet()}">
+            <td th:text="${detail.getKey()}"></td>
+            <td th:text="${detail.getValue()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>Shipment details</h1>
+    <table>
+        <tbody>
+        <tr th:each="detail : ${cartService.getShipmentDetails(cartId).entrySet()}">
+            <td th:text="${detail.getKey()}"></td>
+            <td th:text="${detail.getValue()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Payment successful: <span th:text="${paymentStatus}"></span></h2>
+
+    <p>An automatic message with an order summary was generated from our system and sent to your e-mail.</p>
+
+
+    <a href="/" class="btn btn-warning">Back to main page</a>
+</div>
+<div th:replace="footer.html :: copy"></div>
+</body>
+</html>

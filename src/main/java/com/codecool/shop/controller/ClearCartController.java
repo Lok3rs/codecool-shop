@@ -16,10 +16,14 @@ import java.io.IOException;
 @WebServlet (urlPatterns = {"/clear_cart"})
 public class ClearCartController extends HttpServlet {
 
+    private int cartId;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CartService cartService = new CartService(CartDaoMem.getInstance());
-        cartService.clearCart();
+        this.cartId = Integer.parseInt((String) req.getSession().getAttribute("cart-id"));
+
+        cartService.clearCart(cartId);
         resp.sendRedirect("/cart");
     }
 }

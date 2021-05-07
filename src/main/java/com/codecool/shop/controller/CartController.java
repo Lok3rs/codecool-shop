@@ -20,21 +20,30 @@ import java.io.IOException;
 import java.util.*;
 
 
-
 @WebServlet(urlPatterns = {"/cart"})
 public class CartController extends HttpServlet {
 
-    private final CartService cartService =  new CartService(CartDaoMem.getInstance());
+    private final CartService cartService = new CartService(CartDaoMem.getInstance());
     private final ProductService productService = new ProductService(ProductDaoMem.getInstance(), ProductCategoryDaoMem.getInstance(), SupplierDaoMem.getInstance());
     private final List<Product> products = productService.getAllProducts();
+    private int cartId;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        Map<Product, Integer> productsMap = cartService.getProductsInCart();
+
+        try {
+            this.cartId = Integer.parseInt(req.getParameter("cart-id"));
+        } catch (Exception e){
+            this.cartId = Integer.parseInt((String) req.getSession().getAttribute("cart-id"));
+        }
+
+
+        Map<Product, Integer> productsMap = cartService.getProductsInCart(cartId);
 
         context.setVariable("cartService", cartService);
+        context.setVariable("cartId", cartId);
         context.setVariable("cart", productsMap);
         engine.process("cart/cart.html", context, resp.getWriter());
     }
@@ -43,10 +52,10 @@ public class CartController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("increase") != null ? "increase" : "decrease";
         for (Product product : products) {
-            if (req.getParameter(product.getName()) != null){
-                switch (action){
-                    case "increase" -> cartService.addToCart(product);
-                    case "decrease" -> cartService.removeFromCart(product);
+            if (req.getParameter(product.getName()) != null) {
+                switch (action) {
+                    case "increase" -> cartService.addToCart(product,cartId);
+                    case "decrease" -> cartService.removeFromCart(product,cartId);
                 }
             }
         }

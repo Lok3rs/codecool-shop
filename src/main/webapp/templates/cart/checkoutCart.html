@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Radek & Dawid" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>Codecool Shop</title>
+
+    <!-- Bootstrap components -->
+    <!-- Latest compiled and minified Jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!--Latest compiled and minified Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- End of Bootstrap components -->
+
+    <!--    Font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/checkout-cart.css" />
+</head>
+
+<body>
+
+<div class="jumbotron text-center">
+    <h1>Codecool Shop</h1>
+    <a href="/cart">Cart: <span id="count-of-products" th:text="${cartService.getProductsInCart(cartId).size()}"></span></a>
+</div>
+
+<div class="container">
+    <h1 class="text-center">Your Cart</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prod : ${cart}">
+            <td th:text="${prod.getKey().getName()}">Product name</td>
+            <td th:text="${cartService.getAllProductsPrice(prod.getKey(),cartId)}">Product price</td>
+            <td th:text="${prod.getValue()}">1</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 id="order-form">Order form</h2>
+
+    <form id="order-details" method="post" action="/checkout-cart">
+        <label for="first-name"><b>Firstname:</b></label>
+        <input type="text" name="first-name" id="first-name" required>
+        <label for="last-name"><b>Lastname:</b></label>
+        <input type="text" name="last-name" id="last-name" required>
+        <label for="email"><b>Email</b></label>
+        <input type="text" name="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" size="30" required>
+        <label for="phone"><b>Phone number</b></label>
+        <input type="tel" name="phone" id="phone" minlength="9" maxlength="13" required>
+
+        <h5>Billing Address:</h5>
+
+        <label for="country">Country</label>
+        <input type="text" id="country" name="country" required>
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" required>
+        <label for="zip">Zip code</label>
+        <input id="zip" name="zip" type="text" inputmode="numeric" pattern="^(?(^00000(|-0000))|(\d{5}(|-\d{4})))$" required>
+        <label for="street">Street</label>
+        <input type="text" name="street" id="street" required>
+        <label for="house-number">House number</label>
+        <input type="number" name="house-number" id="house-number" required>
+
+        <h5>Shipping Address</h5>
+
+        <label for="country-ship">Country</label>
+        <input type="text" id="country-ship" name="country-ship" required>
+        <label for="city-ship">City</label>
+        <input type="text" id="city-ship" name="city-ship" required>
+        <label for="zip-ship">Zip code</label>
+        <input id="zip-ship" name="zip-ship" type="text" inputmode="numeric" pattern="^(?(^00000(|-0000))|(\d{5}(|-\d{4})))$" required>
+        <label for="street-ship">Street</label>
+        <input type="text" name="street-ship" id="street-ship" required>
+        <label for="house-number-ship">House number</label>
+        <input type="number" name="house-number-ship" id="house-number-ship" required>
+
+
+        <button id="payment-btn" type="submit" disabled>Go to Payment</button>
+    </form>
+
+</div>
+<div th:replace="footer.html :: copy"></div>
+
+<script>
+    let countOfProducts = document.getElementById("count-of-products").innerText;
+    if(countOfProducts !== "0") {
+        document.getElementById("payment-btn").disabled = false;
+    }
+</script>
+
+</body>
+</html>
