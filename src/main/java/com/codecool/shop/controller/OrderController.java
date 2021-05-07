@@ -1,8 +1,11 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.implementation.AdminLogDaoMem;
 import com.codecool.shop.dao.implementation.CartDaoMem;
+import com.codecool.shop.model.Action;
 import com.codecool.shop.model.Product;
+import com.codecool.shop.service.AdminLogService;
 import com.codecool.shop.service.CartService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class OrderController extends HttpServlet {
 
     private final CartService cartService = new CartService(CartDaoMem.getInstance());
+    private final AdminLogService adminLogService = new AdminLogService(AdminLogDaoMem.getInstance());
     private int cartId;
 
     @Override
@@ -43,6 +47,9 @@ public class OrderController extends HttpServlet {
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
         String paymentMethod = req.getParameter("payment-options");
+
+        adminLogService.addLog(Action.SELECT_PAYMENT_METHOD.getAction());
+
 
         context.setVariable("totalPrice", cartService.getAllOrderPrice(cartId));
 

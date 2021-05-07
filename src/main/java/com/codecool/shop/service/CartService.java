@@ -23,7 +23,7 @@ public class CartService {
 
     public Cart createCart(){
         Cart cart = new Cart();
-//        cartDao.add(cart);
+        cartDao.add(cart);
         return cart;
     }
 

@@ -16,8 +16,8 @@ public class SerializationMenager {
     }
 
     public void saveLog(Order order){
-        LocalDate local = LocalDate.now();
-        File file = new File("logs/" + "order_" + order.getId() + "_" + local + ".json");
+        LocalDate actualDate = LocalDate.now();
+        File file = new File("logs/" + "order_" + order.getId() + "_" + actualDate + ".json");
         try(PrintWriter out = new PrintWriter(file.getAbsolutePath())){
             out.println(gson.toJson(order));
         }catch (Exception e){
@@ -25,6 +25,15 @@ public class SerializationMenager {
         }
     }
 
+    public void saveAdminLog(AdminLogFile adminLogFile, int orderId){
+        LocalDate actualDate = LocalDate.now();
+        File file = new File("admin_logs/" + "order_" + orderId + "_" + actualDate + ".json");
 
+        try(PrintWriter out = new PrintWriter(file.getAbsolutePath())){
+            out.println(gson.toJson(adminLogFile));
+        }catch (Exception e){
+            System.out.println("It is impossible to save log file of order: " + orderId);
+        }
+    }
 
 }

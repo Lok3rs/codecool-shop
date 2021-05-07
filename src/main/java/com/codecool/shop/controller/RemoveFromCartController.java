@@ -26,9 +26,9 @@ public class RemoveFromCartController extends HttpServlet {
         List<Product> products = productService.getAllProducts();
         int cartId = Integer.parseInt((String) req.getSession().getAttribute("cart-id"));
 
-        for (int i = 0; i < products.size(); i++) {
-            if(req.getParameter(products.get(i).getName()) != null){
-                cartService.removeAllTheSameProducts(products.get(i),cartId);
+        for (Product product : products) {
+            if (req.getParameter(product.getName()) != null) {
+                cartService.removeAllTheSameProducts(product, cartId);
             }
         }
 
