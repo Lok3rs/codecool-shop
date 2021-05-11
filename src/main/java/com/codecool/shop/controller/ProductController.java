@@ -1,12 +1,11 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.config.DataBaseConfiguration;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.CartDaoMem;
-import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.jdbc.ProductsCategoryDaoJdbc;
+import com.codecool.shop.dao.jdbc.SupplierDaoJdbc;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.service.CartService;
@@ -19,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,17 +27,17 @@ public class ProductController extends HttpServlet {
     private final int notExistingValue = 0;
     private final String allCategories = "All";
     private Cart cart;
-
+    private final DataSource dataSource = new DataBaseConfiguration().getDataSource();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        SupplierDaoMem supplierDataStore = SupplierDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore, productCategoryDataStore, supplierDataStore);
+        ProductsCategoryDaoJdbc productCategoryDataStore = new ProductsCategoryDaoJdbc(dataSource);
+        SupplierDaoJdbc supplierDataStore = new SupplierDaoJdbc(dataSource);
+        ProductService productService = new ProductService(dataSource);
+
         CartService cartService = new CartService(CartDaoMem.getInstance());
 
         System.out.println(req.getSession().getAttribute("cart-id"));
@@ -50,9 +50,14 @@ public class ProductController extends HttpServlet {
 
         List<Product> products = preparingProductsListToShow(categoryValueFromForm, supplierValueFromForm, productService);
 
+
         context.setVariable("products", products);
         context.setVariable("cart", cart);
-        context.setVariable("productsCategory", productCategoryDataStore.getAll());
+
+
+        context.setVariable("productsCategory", productService.getAllProducts());
+//        context.setVariable("productsCategory", productCategoryDaoJdbc.getAll());
+
         context.setVariable("suppliers", supplierDataStore.getAll());
         context.setVariable("currentCategory", currentCategory(categoryValueFromForm, productCategoryDataStore));
         context.setVariable("currentSupplier", currentSupplier(supplierValueFromForm, supplierDataStore));
@@ -98,7 +103,7 @@ public class ProductController extends HttpServlet {
         else { return allCategories; }
     }
 
-    private String currentSupplier(int supplierId, SupplierDaoMem supplierDataStore){
+    private String currentSupplier(int supplierId, SupplierDaoJdbc supplierDataStore){
         if (supplierId != notExistingValue) { return supplierDataStore.find(supplierId).getName(); }
         else { return allCategories; }
     }

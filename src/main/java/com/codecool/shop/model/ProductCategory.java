@@ -8,9 +8,10 @@ public class ProductCategory extends BaseModel {
     private List<Product> products;
 
     public ProductCategory(String name, String department, String description) {
-        super(name);
+        super(name, description);
         this.department = department;
         this.products = new ArrayList<>();
+
     }
 
     public String getDepartment() {
@@ -32,6 +33,8 @@ public class ProductCategory extends BaseModel {
     public void addProduct(Product product) {
         this.products.add(product);
     }
+
+
 
     @Override
     public String toString() {
